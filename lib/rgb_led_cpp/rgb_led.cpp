@@ -1,11 +1,5 @@
 #include "rgb_led.hpp"
 
-#define LEDC_TIMER LEDC_TIMER_2
-#define LEDC_MODE LED
-#define LEDC_OUTPUT_IO (5)              // Define the output GPIO
-#define LEDC_DUTY_RES LEDC_TIMER_13_BIT // Set duty resolution to 13 bits
-#define LEDC_FREQUENCY (10)             // Frequency in Hertz. Set frequency at 5 kHz
-
 namespace LED
 {
     RGB_LED::RGB_LED(int rgb_led_red_gpio, int rgb_led_green_gpio, int rgb_led_blue_gpio)
@@ -14,52 +8,52 @@ namespace LED
         // red
         ledc_ch[0].channel = LEDC_CHANNEL_0;
         ledc_ch[0].gpio = rgb_led_red_gpio;
-        ledc_ch[0].mode = LEDC_MODE;
-        ledc_ch[0].timer_index = LEDC_TIMER;
+        ledc_ch[0].mode = LEDC_HIGH_SPEED_MODE;
+        ledc_ch[0].timer_index = LEDC_TIMER_0;
 
         // green
 
         ledc_ch[1].channel = LEDC_CHANNEL_1;
         ledc_ch[1].gpio = rgb_led_green_gpio;
-        ledc_ch[1].mode = LEDC_MODE;
-        ledc_ch[1].timer_index = LEDC_TIMER;
+        ledc_ch[1].mode = LEDC_HIGH_SPEED_MODE;
+        ledc_ch[1].timer_index = LEDC_TIMER_0;
 
         // blue
 
         ledc_ch[2].channel = LEDC_CHANNEL_2;
         ledc_ch[2].gpio = rgb_led_blue_gpio;
-        ledc_ch[2].mode = LEDC_MODE;
-        ledc_ch[2].timer_index = LEDC_TIMER;
+        ledc_ch[2].mode = LEDC_HIGH_SPEED_MODE;
+        ledc_ch[2].timer_index = LEDC_TIMER_0;
 
         // configure timer zero
         ledc_timer_config_t ledc_timer;
 
-        ledc_timer.duty_resolution = LEDC_DUTY_RES;
-        ledc_timer.freq_hz = LEDC_FREQUENCY;
-        ledc_timer.speed_mode = LEDC_MODE;
-        ledc_timer.timer_num = LEDC_TIMER;
+        ledc_timer.duty_resolution = LEDC_TIMER_14_BIT;
+        ledc_timer.freq_hz = 10;
+        ledc_timer.speed_mode = LEDC_HIGH_SPEED_MODE;
+        ledc_timer.timer_num = LEDC_TIMER_0;
         ledc_timer.clk_cfg = LEDC_AUTO_CLK;
 
         ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
 
-        printf("\n");
-        printf("0-> channel:%d gpio:%d mode:%d timer_index:%d \n",
-               ledc_ch[0].channel,
-               ledc_ch[0].gpio,
-               ledc_ch[0].mode,
-               ledc_ch[0].timer_index);
-
-        printf("1-> channel:%d gpio:%d mode:%d timer_index:%d\n",
-               ledc_ch[1]
-                   .channel,
-               ledc_ch[1].gpio,
-               ledc_ch[1].mode,
-               ledc_ch[1].timer_index);
-        printf("2-> channel:%d gpio:%d mode:%d timer_index:%d\n",
-               ledc_ch[2].channel,
-               ledc_ch[2].gpio,
-               ledc_ch[2].mode,
-               ledc_ch[2].timer_index);
+        // printf("\n");
+        // printf("0-> channel:%d gpio:%d mode:%d timer_index:%d \n",
+        //        ledc_ch[0].channel,
+        //        ledc_ch[0].gpio,
+        //        ledc_ch[0].mode,
+        //        ledc_ch[0].timer_index);
+        //
+        // printf("1-> channel:%d gpio:%d mode:%d timer_index:%d\n",
+        //       ledc_ch[1]
+        //           .channel,
+        //       ledc_ch[1].gpio,
+        //       ledc_ch[1].mode,
+        //       ledc_ch[1].timer_index);
+        // printf("2-> channel:%d gpio:%d mode:%d timer_index:%d\n",
+        //       ledc_ch[2].channel,
+        //       ledc_ch[2].gpio,
+        //       ledc_ch[2].mode,
+        //       ledc_ch[2].timer_index);
 
         //  configure channels
         for (rgb_ch = 0; rgb_ch < RGB_LED_CHANNEL_NUM; rgb_ch++)
