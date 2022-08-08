@@ -35,11 +35,6 @@ namespace LED
         ledc_channel_config(&_channel_config);
     }
 
-    uint32_t LED_CONTROL::GetChannelDutyCycle(void)
-    {
-        return _channel_config.duty;
-    }
-
     esp_err_t LED_CONTROL::SetChannelGpio(int gpio_num)
     {
         _channel_config.gpio_num = gpio_num;

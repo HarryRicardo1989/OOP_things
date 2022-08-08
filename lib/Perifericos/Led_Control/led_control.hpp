@@ -18,7 +18,6 @@ namespace LED
         LED_CONTROL(int gpioNum);
         LED_CONTROL(int gpioNum, ledc_timer_t timerNum);
 
-        uint32_t GetChannelDutyCycle(void);
         esp_err_t SetChannelGpio(int gpio_num);
         esp_err_t SetChannelSpeedMode(ledc_mode_t speed_mode);
         esp_err_t SetChannel(ledc_channel_t channel);
@@ -35,4 +34,5 @@ namespace LED
                                 int hpoint);
 
     }; // LED_CONTROL class
+
 }

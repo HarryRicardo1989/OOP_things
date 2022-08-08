@@ -1,7 +1,7 @@
 #pragma once
 
-#include "led_control.hpp"
-#include "led_control_timer.hpp"
+#include "Led_Control/led_control.hpp"
+#include "Led_Control/led_control_timer.hpp"
 
 namespace LED_RGB
 {
