@@ -12,7 +12,7 @@ namespace LED
         ledc_timer_config_t _timer_config;
         void _set_defaults();
 
-    public:
+    protected:
         LED_CONTROL_TIMER(void);
 
         esp_err_t InitializeDefaults(void);

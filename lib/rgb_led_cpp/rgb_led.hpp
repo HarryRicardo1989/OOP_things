@@ -5,13 +5,13 @@
 
 namespace LED_RGB
 {
-    class RGB_LED
+    class RGB_LED : LED::LED_CONTROL_TIMER
     {
     private:
         LED::LED_CONTROL led_controller_r = LED::LED_CONTROL();
         LED::LED_CONTROL led_controller_g = LED::LED_CONTROL();
         LED::LED_CONTROL led_controller_b = LED::LED_CONTROL();
-        LED::LED_CONTROL_TIMER led_controller_timer = LED::LED_CONTROL_TIMER();
+        // LED::LED_CONTROL_TIMER led_controller_timer = LED::LED_CONTROL_TIMER();
 
     public:
         RGB_LED(int gpio_r, int gpio_g, int gpio_b);
