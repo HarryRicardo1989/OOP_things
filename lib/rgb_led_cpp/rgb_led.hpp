@@ -14,7 +14,15 @@ namespace LED_RGB
         // LED::LED_CONTROL_TIMER led_controller_timer = LED::LED_CONTROL_TIMER();
 
     public:
-        RGB_LED(int gpio_r, int gpio_g, int gpio_b);
+        /**
+         * @brief Construct a new rgb led object
+         *
+         * @param gpio_r GPIO
+         * @param gpio_g
+         * @param gpio_b
+         * @param led_Duty_Resolution
+         */
+        RGB_LED(int gpio_r, int gpio_g, int gpio_b, ledc_timer_bit_t led_Duty_Resolution);
         void rgb_led_set_color(int red, int green, int blue);
     };
 
