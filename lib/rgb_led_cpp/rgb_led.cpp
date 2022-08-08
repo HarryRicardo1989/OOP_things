@@ -3,10 +3,10 @@
 namespace LED_RGB
 {
 
-    RGB_LED::RGB_LED(int gpio_r, int gpio_g, int gpio_b)
+    RGB_LED::RGB_LED(int gpio_r, int gpio_g, int gpio_b, ledc_timer_bit_t led_Duty_Resolution)
     {
         InitializeDefaults();
-        SetTimerDutyResolution(LEDC_TIMER_10_BIT);
+        SetTimerDutyResolution(led_Duty_Resolution);
 
         led_controller_r.SetChannel(LEDC_CHANNEL_0);
         led_controller_g.SetChannel(LEDC_CHANNEL_1);
