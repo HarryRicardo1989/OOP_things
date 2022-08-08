@@ -1,6 +1,6 @@
 #include "led_control.hpp"
 
-namespace LED
+namespace Perifericos
 {
     void LED_CONTROL::_set_defaults()
     {

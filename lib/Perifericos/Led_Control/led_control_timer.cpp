@@ -1,6 +1,6 @@
 #include "led_control_timer.hpp"
 
-namespace LED
+namespace Perifericos
 {
 
     void LED_CONTROL_TIMER::_set_defaults()

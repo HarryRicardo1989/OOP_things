@@ -4,7 +4,7 @@
 #include "driver/ledc.h"
 #include "esp_err.h"
 
-namespace LED
+namespace Perifericos
 {
     class LED_CONTROL_TIMER
     {

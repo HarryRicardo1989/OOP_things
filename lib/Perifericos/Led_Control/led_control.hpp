@@ -4,7 +4,7 @@
 #include "esp_err.h"
 #include "led_control_timer.hpp"
 
-namespace LED
+namespace Perifericos
 {
 
     class LED_CONTROL

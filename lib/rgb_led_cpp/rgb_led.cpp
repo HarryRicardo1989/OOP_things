@@ -3,7 +3,7 @@
 namespace LED_RGB
 {
 
-    RGB_LED::RGB_LED(int gpio_r, int gpio_g, int gpio_b, ledc_timer_bit_t led_Duty_Resolution)
+    RGB_CONTROL::RGB_CONTROL(int gpio_r, int gpio_g, int gpio_b, ledc_timer_bit_t led_Duty_Resolution)
     {
         InitializeDefaults();
         SetTimerDutyResolution(led_Duty_Resolution);
@@ -17,11 +17,11 @@ namespace LED_RGB
         led_controller_b.SetChannelGpio(gpio_b);
     }
 
-    void RGB_LED::rgb_led_set_color(int red, int green, int blue)
+    void RGB_CONTROL::set_color(uint32_t red, uint32_t green, uint32_t blue)
     {
         led_controller_r.SetChannelDutyCycle(red);
         led_controller_g.SetChannelDutyCycle(green);
         led_controller_b.SetChannelDutyCycle(blue);
     }
 
-} // namespace RGB_LED
+} // namespace RGB_CONTROL
