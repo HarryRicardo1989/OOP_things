@@ -27,7 +27,6 @@ namespace ADC
         bool _checkCalFuse();
 
     public:
-        ADC_CONTROLL(void);
         ADC_CONTROLL(adc1_channel_t channel);
         void SetChannel(adc1_channel_t channel);
         esp_err_t SetBitWidth(adc_bits_width_t bitWidth);

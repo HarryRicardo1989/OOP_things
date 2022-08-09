@@ -16,10 +16,6 @@ namespace ADC
         return cali_enable;
     }
 
-    ADC_CONTROLL::ADC_CONTROLL(void)
-    {
-    }
-
     ADC_CONTROLL::ADC_CONTROLL(adc1_channel_t channel)
     {
         SetChannel(channel);

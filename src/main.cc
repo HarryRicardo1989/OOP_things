@@ -28,7 +28,7 @@ extern "C"
 void app_main(void)
 {
     LED_RGB::RGB_CONTROL rgb_led(RGB_LED_RED_GPIO, RGB_LED_GREEN_GPIO, RGB_LED_BLUE_GPIO, LED_DUTY_RESOLUTION);
-    ADC::ADC_CONTROLL adc(ADC_CHANNEL_7);
+    ADC::ADC_CONTROLL adc{ADC_CHANNEL_7};
     adc.SetBitWidth(12);
 
     while (true)
