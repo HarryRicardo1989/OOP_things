@@ -31,13 +31,13 @@ void app_main(void)
     while (true)
     {
         printf("inicio\n");
-        rgb_led.set_color(1, 0, 0);
+        rgb_led.set_color(10, 0, 0);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        rgb_led.set_color(0, 1, 0);
+        rgb_led.set_color(0, 10, 0);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        rgb_led.set_color(0, 0, 1);
+        rgb_led.set_color(0, 0, 20);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        rgb_led.set_color(1, 1, 1);
+        rgb_led.set_color(10, 10, 15);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
         printf("fim\n");
     }
