@@ -3,6 +3,7 @@
     "files.associations": {
         "nvs_flash.h": "c",
         "stdio.h": "c",
-        "esp_bt_main.h": "c"
+        "esp_bt_main.h": "c",
+        "esp_bt_defs.h": "c"
     }
 }
