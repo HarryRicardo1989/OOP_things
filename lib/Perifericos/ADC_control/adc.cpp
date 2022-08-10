@@ -76,9 +76,10 @@ namespace ADC
             _bitWidth = ADC_WIDTH_BIT_12;
             break;
         default:
-            _bitWidth = ADC_WIDTH_BIT_12;
+            _bitWidth = ADC_WIDTH_MAX;
             break;
         }
+
         _calEnabled = _checkCalFuse();
         return adc1_config_width(_bitWidth);
     }

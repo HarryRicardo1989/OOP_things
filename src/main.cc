@@ -1,7 +1,7 @@
 #include "stdio.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
+#include "task.h"
+#include "rom/ets_sys.h"
 #include "rgb_led.hpp"
 
 #include "ADC_control/adc.hpp"
@@ -24,27 +24,38 @@ extern "C"
 {
     void app_main(void);
 }
+LED_RGB::RGB_CONTROL rgb_led(RGB_LED_RED_GPIO, RGB_LED_GREEN_GPIO, RGB_LED_BLUE_GPIO, LED_DUTY_RESOLUTION);
+ADC::ADC_CONTROLL adc = ADC::ADC_CONTROLL(ADC1_CHANNEL_7);
 
 void app_main(void)
 {
-    LED_RGB::RGB_CONTROL rgb_led(RGB_LED_RED_GPIO, RGB_LED_GREEN_GPIO, RGB_LED_BLUE_GPIO, LED_DUTY_RESOLUTION);
-    ADC::ADC_CONTROLL adc{ADC_CHANNEL_7};
-    adc.SetBitWidth(12);
+    rgb_led.set_color(10, 0, 0);
+
+    xTaskCreatePinnedToCore(vTask_led, "TASK LED", configMINIMAL_STACK_SIZE + 1024, NULL, 10, &task_led_handle, 0);
+    xTaskCreatePinnedToCore(vTask_print, "TASK Print", configMINIMAL_STACK_SIZE + 1024, NULL, 1, &task_print_handle, 1);
 
     while (true)
     {
-        printf("adc pin35:%d \n", adc.GetRaw());
-        printf("adc pin35:%d \n", adc.GetVoltage());
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
 
-        // rgb_led.set_color(10, 0, 0);
+void vTask_led(void *pvParameters)
+{
+    while (true)
+    {
+        printf("adc pin35:%d \n", adc.GetRaw());
+        printf("Volt pin35:%d \n", adc.GetVoltage());
+        printf("%d\n", ets_get_cpu_frequency());
         // vTaskDelay(1000 / portTICK_PERIOD_MS);
-        // rgb_led.set_color(0, 10, 0);
-        // vTaskDelay(1000 / portTICK_PERIOD_MS);
-        // rgb_led.set_color(0, 0, 20);
-        // vTaskDelay(1000 / portTICK_PERIOD_MS);
-        // rgb_led.set_color(10, 10, 15);
-        // vTaskDelay(1000 / portTICK_PERIOD_MS);
-        // printf("fim\n");
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+void vTask_print(void *pvParameters)
+{
+    while (true)
+    {
+        rgb_led.set_color(0, 0, adc.GetRaw());
+        vTaskDelay(5 / portTICK_PERIOD_MS);
     }
 }
