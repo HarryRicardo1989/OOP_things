@@ -3,7 +3,7 @@
 #include "task.h"
 #include "rom/ets_sys.h"
 #include "rgb_led.hpp"
-
+#include "ble_gatt.h"
 #include "ADC_control/adc.hpp"
 
 #define RGB_LED_RED_GPIO 21
@@ -30,9 +30,8 @@ ADC::ADC_CONTROLL adc = ADC::ADC_CONTROLL(ADC1_CHANNEL_7);
 void app_main(void)
 {
     rgb_led.set_color(10, 0, 0);
-
-    xTaskCreatePinnedToCore(vTask_led, "TASK LED", configMINIMAL_STACK_SIZE + 1024, NULL, 10, &task_led_handle, 0);
-    xTaskCreatePinnedToCore(vTask_print, "TASK Print", configMINIMAL_STACK_SIZE + 1024, NULL, 1, &task_print_handle, 1);
+    xTaskCreatePinnedToCore(vTask_led, "TASK LED", VTASK_STACK_SIZE_LED, NULL, VTASK_PRIORITY_LED, &task_led_handle, VTASK_CORE_ID_LED);
+    ble_init1();
 
     while (true)
     {
@@ -44,18 +43,7 @@ void vTask_led(void *pvParameters)
 {
     while (true)
     {
-        printf("adc pin35:%d \n", adc.GetRaw());
-        printf("Volt pin35:%d \n", adc.GetVoltage());
-        printf("%d\n", ets_get_cpu_frequency());
-        // vTaskDelay(1000 / portTICK_PERIOD_MS);
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
-void vTask_print(void *pvParameters)
-{
-    while (true)
-    {
         rgb_led.set_color(0, 0, adc.GetRaw());
-        vTaskDelay(5 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
