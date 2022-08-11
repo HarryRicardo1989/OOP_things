@@ -32,7 +32,6 @@ void app_main(void)
     rgb_led.set_color(10, 0, 0);
     xTaskCreatePinnedToCore(vTask_led, "TASK LED", VTASK_STACK_SIZE_LED, NULL, VTASK_PRIORITY_LED, &task_led_handle, VTASK_CORE_ID_LED);
     ble_init1();
-
     while (true)
     {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
