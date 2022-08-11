@@ -12,18 +12,17 @@
 #include "nvs_flash.h"
 #include "esp_bt.h"
 
-#define GATTS_TAG "BLE-TAG"
+#define GATTS_TAG1 "BLE-TAG-NOTIFY"
+#define GATTS_TAG2 "BLE-TAG_ERROR"
+#define GATTS_TAG3 "BLE-TAG"
+#define GATTS_TAG4 "BLE-Value"
+
 #define TEST_DEVICE_NAME "BLE-Teste"
 
-#define GATTS_SERVICE_UUID 0x2800
+#define GATTS_SERVICE_UUID 0x6E40 // 0000B5A3F393E0A9E50E24DCCA9E
 #define GATTS_CHAR_UUID 0x0002
 #define GATTS_DESCR_UUID 0x1801
 #define GATTS_NUM_HANDLE 4
-
-#define GATTS_SERVICE_UUID_TEST_B 0x00EE
-#define GATTS_CHAR_UUID_TEST_B 0xEE01
-#define GATTS_DESCR_UUID_TEST_B 0x2222
-#define GATTS_NUM_HANDLE_TEST_B 4
 
 #define TEST_MANUFACTURER_DATA_LEN 17
 
@@ -34,14 +33,14 @@
 
 #define PROFILE_NUM 1
 #define PROFILE_A_APP_ID 0
-#define PROFILE_B_APP_ID 1
-/// Declare the static function
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
     void ble_init1(void);
+    void pass_veryfy(char *password, uint8_t pass_length);
 
 #ifdef __cplusplus
 }
