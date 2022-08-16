@@ -20,7 +20,11 @@
 
 #include "driver/gpio.h"
 
-#define GATTS_TAG "BLE-TAG2"
+#define GATTS_TAG "BLE-TAG-NOTIFY"
+#define GATTS_TAG2 "BLE-TAG_ERROR"
+#define GATTS_TAG3 "BLE-TAG"
+#define GATTS_TAG4 "BLE-Value"
+
 #define TEST_DEVICE_NAME "BLE-Teste2"
 #define PROFILE_NUM 1
 #define PROFILE_A_APP_ID 0
@@ -30,7 +34,10 @@
 #define GPIO_IO 2
 #define GPIO_OUTPUT_SEL ((1ULL << GPIO_IO))
 #define NOTIFY_LED_EVENT (1 << 1)
-#define GATTS_DEMO_CHAR_VAL_LEN_MAX 0x01
+//#define GATTS_DEMO_CHAR_VAL_LEN_MAX 0x01
+
+#define GATTS_DEMO_CHAR_VAL_LEN_MAX 0x40
+#define PREPARE_BUF_MAX_SIZE 1024
 
 #ifdef __cplusplus
 extern "C"

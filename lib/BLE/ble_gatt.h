@@ -11,6 +11,7 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "esp_bt.h"
+#include "driver/gpio.h"
 
 #define GATTS_TAG1 "BLE-TAG-NOTIFY"
 #define GATTS_TAG2 "BLE-TAG_ERROR"
@@ -34,11 +35,16 @@
 #define PROFILE_NUM 1
 #define PROFILE_A_APP_ID 0
 
+#define GPIO_IO 2
+#define GPIO_OUTPUT_SEL ((1ULL << GPIO_IO))
+#define NOTIFY_LED_EVENT (1 << 1)
+
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
+    void ledTask(void *pvParameters);
     void ble_init1(void);
     void pass_veryfy(char *password, uint8_t pass_length);
 

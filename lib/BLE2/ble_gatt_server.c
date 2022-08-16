@@ -8,41 +8,43 @@ uint8_t ledCmd;
 static esp_gatt_char_prop_t a_property = 0;
 
 static uint8_t adv_service_uuid128[16] = {
-    0x1b,
-    0x01,
-    0xc4,
-    0x74,
-    0x1c,
-    0x15,
-    0x11,
-    0xeb,
-    0xad,
-    0xc1,
-    0x02,
-    0x42,
-    0xac,
-    0x12,
-    0x00,
-    0x02,
+    0x9E, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x00, 0x00, 0x40, 0x6E,
+    /*     0x1b,
+        0x01,
+        0xc4,
+        0x74,
+        0x1c,
+        0x15,
+        0x11,
+        0xeb,
+        0xad,
+        0xc1,
+        0x02,
+        0x42,
+        0xac,
+        0x12,
+        0x00,
+        0x02, */
 };
-
+// ;
 static uint8_t adv_char_uuid128[16] = {
-    0x00,
-    0x01,
-    0xc4,
-    0x74,
-    0x1c,
-    0x15,
-    0x11,
-    0xeb,
-    0xad,
-    0xc1,
-    0x02,
-    0x42,
-    0xac,
-    0x12,
-    0x00,
-    0x02,
+    0x9E, 0xCA, 0xDC, 0x24, 0x0E, 0xE5, 0xA9, 0xE0, 0x93, 0xF3, 0xA3, 0xB5, 0x00, 0x00, 0x40, 0x6E
+    /*     0x00,
+        0x01,
+        0xc4,
+        0x74,
+        0x1c,
+        0x15,
+        0x11,
+        0xeb,
+        0xad,
+        0xc1,
+        0x02,
+        0x42,
+        0xac,
+        0x12,
+        0x00,
+        0x02, */
 };
 // The length of adv data must be less than 31 bytes
 static uint8_t test_manufacturer[TEST_MANUFACTURER_DATA_LEN] = {0x12, 0x34, 0x56, 0x78};
@@ -53,7 +55,7 @@ static esp_ble_adv_data_t adv_data = {
     .include_txpower = true,
     .min_interval = 0x0006, // slave connection min interval, Time = min_interval * 1.25 msec
     .max_interval = 0x0010, // slave connection max interval, Time = max_interval * 1.25 msec
-    .appearance = 0x0001,
+    .appearance = 0x03C6,
     .manufacturer_len = TEST_MANUFACTURER_DATA_LEN,
     .p_manufacturer_data = &test_manufacturer[1],
     .service_data_len = 0,
@@ -95,7 +97,13 @@ struct gatts_profile_inst
     uint16_t descr_handle;
     esp_bt_uuid_t descr_uuid;
 };
+typedef struct
+{
+    uint8_t *prepare_buf;
+    int prepare_len;
+} prepare_type_env_t;
 
+static prepare_type_env_t a_prepare_write_env;
 /* One gatt-based profile one app_id and one gatts_if, this array will store the gatts_if returned by ESP_GATTS_REG_EVT */
 static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {
     [PROFILE_A_APP_ID] = {
@@ -103,6 +111,8 @@ static struct gatts_profile_inst gl_profile_tab[PROFILE_NUM] = {
         .gatts_if = ESP_GATT_IF_NONE, /* Not get the gatt_if, so initial is ESP_GATT_IF_NONE */
     },
 };
+void example_write_event_env(esp_gatt_if_t gatts_if, prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param);
+void example_exec_write_event_env(prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param);
 
 void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
 {
@@ -147,6 +157,81 @@ void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
     default:
         break;
     }
+}
+void example_write_event_env(esp_gatt_if_t gatts_if, prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param)
+{
+    esp_gatt_status_t status = ESP_GATT_OK;
+    if (param->write.need_rsp)
+    {
+        if (param->write.is_prep)
+        {
+            if (prepare_write_env->prepare_buf == NULL)
+            {
+                prepare_write_env->prepare_buf = (uint8_t *)malloc(PREPARE_BUF_MAX_SIZE * sizeof(uint8_t));
+                prepare_write_env->prepare_len = 0;
+                if (prepare_write_env->prepare_buf == NULL)
+                {
+                    ESP_LOGE(GATTS_TAG2, "Gatt_server prep no mem\n");
+                    status = ESP_GATT_NO_RESOURCES;
+                }
+            }
+            else
+            {
+                if (param->write.offset > PREPARE_BUF_MAX_SIZE)
+                {
+                    status = ESP_GATT_INVALID_OFFSET;
+                }
+                else if ((param->write.offset + param->write.len) > PREPARE_BUF_MAX_SIZE)
+                {
+                    status = ESP_GATT_INVALID_ATTR_LEN;
+                }
+            }
+
+            esp_gatt_rsp_t *gatt_rsp = (esp_gatt_rsp_t *)malloc(sizeof(esp_gatt_rsp_t));
+            gatt_rsp->attr_value.len = param->write.len;
+            gatt_rsp->attr_value.handle = param->write.handle;
+            gatt_rsp->attr_value.offset = param->write.offset;
+            gatt_rsp->attr_value.auth_req = ESP_GATT_AUTH_REQ_NONE;
+            // memcpy(gatt_rsp->attr_value.value, param->write.value, param->write.len);
+            memcpy(gatt_rsp->attr_value.value, "param", 5);
+            esp_err_t response_err = esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, status, gatt_rsp);
+            if (response_err != ESP_OK)
+            {
+                ESP_LOGE(GATTS_TAG2, "Send response error\n");
+            }
+            free(gatt_rsp);
+            if (status != ESP_GATT_OK)
+            {
+                return;
+            }
+            memcpy(prepare_write_env->prepare_buf + param->write.offset,
+                   param->write.value,
+                   param->write.len);
+            prepare_write_env->prepare_len += param->write.len;
+        }
+        else
+        {
+            esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, status, NULL);
+        }
+    }
+}
+
+void example_exec_write_event_env(prepare_type_env_t *prepare_write_env, esp_ble_gatts_cb_param_t *param)
+{
+    if (param->exec_write.exec_write_flag == ESP_GATT_PREP_WRITE_EXEC)
+    {
+        esp_log_buffer_hex(GATTS_TAG3, prepare_write_env->prepare_buf, prepare_write_env->prepare_len);
+    }
+    else
+    {
+        ESP_LOGI(GATTS_TAG2, "ESP_GATT_PREP_WRITE_CANCEL");
+    }
+    if (prepare_write_env->prepare_buf)
+    {
+        free(prepare_write_env->prepare_buf);
+        prepare_write_env->prepare_buf = NULL;
+    }
+    prepare_write_env->prepare_len = 0;
 }
 
 void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param)
