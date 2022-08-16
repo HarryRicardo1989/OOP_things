@@ -8,7 +8,7 @@
 
 TaskHandle_t ledTask_h;
 uint8_t ledCmd;
-
+int battery_voltage = 0;
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 // static void gatts_profile_b_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 static uint8_t char1_str[] = {0x11, 0x22, 0x33};
@@ -279,14 +279,16 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
         ESP_LOGI(GATTS_TAG4, "GATT_READ_EVT, conn_id %d, trans_id %d, handle %d\n", param->read.conn_id, param->read.trans_id, param->read.handle);
         esp_gatt_rsp_t rsp;
         memset(&rsp, 0, sizeof(esp_gatt_rsp_t));
-        rsp.attr_value.handle = param->read.handle;
-        rsp.attr_value.len = 5;
-        rsp.attr_value.value[0] = 0x73;
-        rsp.attr_value.value[1] = 0x74;
-        rsp.attr_value.value[2] = 0x75;
-        rsp.attr_value.value[3] = 0x76;
-        rsp.attr_value.value[4] = 0x77;
+        rsp.attr_value.handle = param->read.handle; // ricardo-bat
+        char str[9];
+        sprintf(str, "%dmV", battery_voltage);
 
+        rsp.attr_value.len = strlen(str);
+        for (int i = 0; i < strlen(str); i++)
+        {
+            rsp.attr_value.value[i] = str[i];
+        }
+        // printf("%s \n" rsp.attr_value.value);
         esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id,
                                     ESP_GATT_OK, &rsp);
         break;
@@ -608,4 +610,9 @@ void ble_init1(void)
 void pass_veryfy(char *password, uint8_t pass_length)
 {
     printf("text:%s length:%d \n", password, pass_length);
+}
+
+void battery_value(int voltage)
+{
+    battery_voltage = voltage;
 }

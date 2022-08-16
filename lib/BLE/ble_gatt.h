@@ -47,6 +47,7 @@ extern "C"
     void ledTask(void *pvParameters);
     void ble_init1(void);
     void pass_veryfy(char *password, uint8_t pass_length);
+    void battery_value(int voltage);
 
 #ifdef __cplusplus
 }
