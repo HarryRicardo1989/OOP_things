@@ -21,7 +21,7 @@
  * LEDC_TIMER_13_BIT = 8192
  * LEDC_TIMER_14_BIT = 16384
  */
-#define LED_DUTY_RESOLUTION LEDC_TIMER_12_BIT
+#define LED_DUTY_RESOLUTION LEDC_TIMER_8_BIT
 
 extern "C"
 {
@@ -47,7 +47,7 @@ void vTask_led(void *pvParameters)
 {
     while (true)
     {
-        rgb_led.set_color(0, 0, adc.GetRaw());
+        rgb_led.set_color(0, 160, 208);
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }

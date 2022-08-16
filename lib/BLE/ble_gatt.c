@@ -6,8 +6,6 @@
 #include "esp_bt_main.h"
 #include "esp_gatt_common_api.h"
 
-TaskHandle_t ledTask_h;
-uint8_t ledCmd;
 int battery_voltage = 0;
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 // static void gatts_profile_b_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -502,39 +500,6 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
         }
     } while (0);
 }
-void ledTask(void *pvParameters)
-{
-    uint32_t notif;
-    BaseType_t ret;
-    gpio_config_t io_config;
-
-    io_config.pin_bit_mask = GPIO_OUTPUT_SEL;
-    io_config.mode = GPIO_MODE_OUTPUT;
-    io_config.pull_up_en = 0;
-    io_config.pull_down_en = 0;
-    io_config.intr_type = 0;
-
-    gpio_config(&io_config);
-
-    printf("Waiting for the led command\n");
-    for (;;)
-    {
-        if ((ret = xTaskNotifyWait(0, 0xFFFFFFFF, &notif, portMAX_DELAY)) == pdPASS)
-        {
-            if (ledCmd == 0x01)
-            {
-                gpio_set_level(GPIO_IO, 1);
-                printf("Led is on\n");
-            }
-            else if (ledCmd == 0x00)
-            {
-                printf("Led is off\n");
-                gpio_set_level(GPIO_IO, 0);
-            }
-        }
-        printf("Waiting for the led command\n");
-    }
-}
 
 void ble_init1(void)
 {
@@ -596,8 +561,6 @@ void ble_init1(void)
         ESP_LOGE(GATTS_TAG2, "gatts app register error, error code = %x", ret);
         return;
     }
-
-    xTaskCreate(ledTask, "Gpio Led task", 4096, NULL, 5, &ledTask_h);
 
     esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(500);
     if (local_mtu_ret)
