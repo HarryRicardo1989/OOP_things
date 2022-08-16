@@ -1,7 +1,10 @@
+// default C/C++ lib
 #include "stdio.h"
 
+// project libs
+
 #include "task.h"
-#include "rom/ets_sys.h"
+//#include "rom/ets_sys.h"
 #include "rgb_led.hpp"
 #include "ble_gatt.h"
 #include "ADC_control/adc.hpp"
