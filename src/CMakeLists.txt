@@ -3,4 +3,12 @@
 
 FILE(GLOB_RECURSE app_sources ${CMAKE_SOURCE_DIR}/src/*.*)
 
-idf_component_register(SRCS ${app_sources})
+idf_component_register(SRCS ${app_sources}
+
+    # INCLUDE_DIRS "."
+    EMBED_FILES
+    webpage/app.js
+    webpage/app.css
+    webpage/index.html
+    webpage/favicon.jpeg
+    webpage/jquery-3.3.1.min.js)
