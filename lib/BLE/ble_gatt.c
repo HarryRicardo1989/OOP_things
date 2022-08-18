@@ -5,7 +5,10 @@
 #include "esp_bt_defs.h"
 #include "esp_bt_main.h"
 #include "esp_gatt_common_api.h"
+#include "wifi_app.h"
 
+const char *secret = "assaplk";
+const char *ota_update = "OTAupdate";
 int battery_voltage = 0;
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 // static void gatts_profile_b_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -573,9 +576,29 @@ void ble_init1(void)
 void pass_veryfy(char *password, uint8_t pass_length)
 {
     printf("text:%s length:%d \n", password, pass_length);
+    if (strcmp(password, ota_update) == 0)
+    {
+        change_BLE_to_WIFI();
+    }
+    if (strcmp(password, secret) == 0)
+    {
+        // change_BLE_to_WIFI();
+    }
 }
 
 void battery_value(int voltage)
 {
     battery_voltage = voltage;
+}
+
+void change_BLE_to_WIFI(void)
+{
+    esp_err_t ret;
+
+    ret = esp_bt_controller_disable();
+    if (ret)
+    {
+        ESP_LOGE(GATTS_TAG2, "%s enable controller failed: %s\n", __func__, esp_err_to_name(ret));
+    }
+    wifi_app_start();
 }

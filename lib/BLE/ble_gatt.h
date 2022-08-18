@@ -48,6 +48,7 @@ extern "C"
     void ble_init1(void);
     void pass_veryfy(char *password, uint8_t pass_length);
     void battery_value(int voltage);
+    void change_BLE_to_WIFI(void);
 
 #ifdef __cplusplus
 }

@@ -176,7 +176,7 @@ wifi_app_task(void *pvParameters)
                 ESP_LOGI(TAG, "WIFI_APP_MSG_START_HTTP_SERVER");
                 http_server_start();
                 // rgb_led_http_server_started();
-                set_rgb_led_interface(0, 10, 10);
+                set_rgb_led_interface(1, 10, 3);
 
                 break;
             case WIFI_APP_MSG_CONNECTING_FROM_HTTP_SERVER:
