@@ -440,3 +440,11 @@ void http_server_fw_update_reset_callback(void *arg)
     ESP_LOGI(TAG, "http_server_fw_update_reset_callback: Timer timed-out, restarting the device");
     esp_restart();
 }
+
+/* static esp_err_t http_server_wifi_disconnect(httpd_req_t *req)
+{
+
+    ESP_LOGI(TAG, "wifi disconnect requested");
+    wifi_app_send_message(WIFI_APP_MSG_REQUESTED_STA_DISCONNECT);
+    return ESP_OK;
+} */

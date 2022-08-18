@@ -6,6 +6,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
 #include "freertos/task.h"
+#include "Lang_conect/lang_conect.h"
 
 // IDF includes
 #include "esp_err.h"
@@ -175,7 +176,7 @@ wifi_app_task(void *pvParameters)
                 ESP_LOGI(TAG, "WIFI_APP_MSG_START_HTTP_SERVER");
                 http_server_start();
                 // rgb_led_http_server_started();
-                // set_rgb_led_interface(0, 10, 10);
+                set_rgb_led_interface(0, 10, 10);
 
                 break;
             case WIFI_APP_MSG_CONNECTING_FROM_HTTP_SERVER:
@@ -185,7 +186,7 @@ wifi_app_task(void *pvParameters)
             case WIFI_APP_MSG_STA_CONNECTED_GOT_IP:
                 ESP_LOGI(TAG, "WIFI_APP_MSG_STA_CONNECTED_GOT_IP");
                 // rgb_led_wifi_connected();
-                // set_rgb_led_interface(0, 0, 10);
+                set_rgb_led_interface(0, 0, 10);
                 break;
 
             default:

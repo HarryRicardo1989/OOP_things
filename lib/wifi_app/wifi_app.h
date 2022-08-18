@@ -5,7 +5,6 @@ extern "C"
 {
 #endif
 
-//#include "Lang_conect/lang_conect.h"
 #include "esp_netif.h"
 
 // Wifi application settings
