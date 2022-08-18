@@ -13,6 +13,7 @@
  * LEDC_TIMER_14_BIT = 16384
  */
 #define LED_DUTY_RESOLUTION LEDC_TIMER_12_BIT
+
 #ifdef __cplusplus
 extern "C"
 {
