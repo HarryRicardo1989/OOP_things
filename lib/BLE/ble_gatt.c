@@ -580,10 +580,13 @@ void pass_veryfy(char *password, uint8_t pass_length)
     {
         change_BLE_to_WIFI();
     }
-    if (strcmp(password, secret) == 0)
+    else
     {
-        // change_BLE_to_WIFI();
     }
+    /*     if (strcmp(password, secret) == 0)
+        {
+            // change_BLE_to_WIFI();
+        } */
 }
 
 void battery_value(int voltage)
