@@ -2,23 +2,20 @@
 #include "stdio.h"
 
 // project libs
-
 #include "task.h"
-//#include "rom/ets_sys.h"
 #include "rgb_led.hpp"
 #include "ble_gatt.h"
 #include "ADC_control/adc.hpp"
-//#include "wifi_app.h"
 #include <stdlib.h>
 #include <string.h>
 #include "nvs_flash.h"
 #include "Lang_conect/lang_conect.h"
-
 extern "C"
 {
     void app_main(void);
 }
 ADC::ADC_CONTROLL adc = ADC::ADC_CONTROLL(ADC1_CHANNEL_7);
+
 void app_main(void)
 {
 
@@ -33,7 +30,7 @@ void app_main(void)
     battery_value(adc.GetVoltage());
     // xTaskCreatePinnedToCore(vTask_led, "TASK LED", VTASK_STACK_SIZE_LED, NULL, VTASK_PRIORITY_LED, &task_led_handle, VTASK_CORE_ID_LED);
     xTaskCreatePinnedToCore(vTask_battery_voltage, "TASK BATTERY VOLTAGE", VTASK_STACK_SIZE_BATTERY_VOLTAGE, NULL, VTASK_PRIORITY_BATTERY_VOLTAGE, &task_battery_voltage_handle, VTASK_CORE_ID_BATTERY_VOLTAGE);
-    set_rgb_led_interface(0, 130, 252);
+    set_led_ble();
     ble_init1();
 
     while (true)
@@ -57,7 +54,6 @@ void vTask_battery_voltage(void *pvParameters)
     while (true)
     {
         battery_value(adc.GetVoltage());
-
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }

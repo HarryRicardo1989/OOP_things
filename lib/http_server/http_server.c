@@ -6,6 +6,7 @@
 #include "http_server.h"
 #include "tasks_common.h"
 #include "wifi_app.h"
+#include "Lang_conect/lang_conect.h"
 
 // Tag used for ESP serial console messages
 static const char TAG[] = "http_server";
@@ -218,6 +219,7 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
             ESP_LOGI(TAG, "http_server_OTA_update_handler: OTA other Error %d", recv_len);
             return ESP_FAIL;
         }
+        set_rgb_led_interface(10, 0, 0); // OTA led downloading
         printf("http_server_OTA_update_handler: OTA RX: %d of %d\r", content_received, content_length);
 
         // is this the first data
@@ -232,7 +234,6 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
             printf("http_server_OTA_update_handler: OTA file size: %d\r\n", content_length);
 
             esp_err_t err = esp_ota_begin(update_partition, OTA_SIZE_UNKNOWN, &ota_handle);
-            printf("passou aqui1");
             if (err != ESP_OK)
             {
                 printf("http_server_OTA_update_handler: Error with OTA begin, cancelling OTA\r\n");
@@ -249,6 +250,7 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
         else
         {
             // write OTA data
+            set_rgb_led_interface(256, 0, 0);
             esp_ota_write(ota_handle, ota_buff, recv_len);
             content_received += recv_len;
         }
@@ -256,6 +258,7 @@ esp_err_t http_server_OTA_update_handler(httpd_req_t *req)
     } while (recv_len > 0 && content_received < content_length);
     if (esp_ota_end(ota_handle) == ESP_OK)
     {
+        set_rgb_led_interface(0, 2048, 0); // update led complete
         if (esp_ota_set_boot_partition(update_partition) == ESP_OK)
         { // lets update the partition
             const esp_partition_t *boot_partition = esp_ota_get_boot_partition();

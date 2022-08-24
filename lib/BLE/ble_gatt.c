@@ -6,8 +6,8 @@
 #include "esp_bt_main.h"
 #include "esp_gatt_common_api.h"
 #include "wifi_app.h"
+#include "Lang_conect/lang_conect.h"
 
-const char *secret = "assaplk";
 const char *ota_update = "OTAupdate";
 int battery_voltage = 0;
 static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
@@ -302,10 +302,7 @@ static void gatts_profile_a_event_handler(esp_gatts_cb_event_t event, esp_gatt_i
             ESP_LOGI(GATTS_TAG1, "GATT_WRITE_EVT, value len %d, value :", param->write.len);
             esp_log_buffer_hex(GATTS_TAG4, param->write.value, param->write.len);
 
-            // printf("text:%s length:%d \n", param->write.value, param->write.len); // ricardo
-            // char pass = param;
-            uint8_t pass_length = param->write.len;
-            pass_veryfy((char *)param->write.value, pass_length);
+            pass_veryfy((char *)param->write.value, param->write.len); // ricardo
 
             if (gl_profile_tab[PROFILE_A_APP_ID].descr_handle == param->write.handle && param->write.len == 2)
             {
@@ -582,11 +579,8 @@ void pass_veryfy(char *password, uint8_t pass_length)
     }
     else
     {
+        open_with_password_connect(password);
     }
-    /*     if (strcmp(password, secret) == 0)
-        {
-            // change_BLE_to_WIFI();
-        } */
 }
 
 void battery_value(int voltage)

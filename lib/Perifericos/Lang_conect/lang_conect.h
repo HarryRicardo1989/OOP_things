@@ -1,8 +1,8 @@
 #pragma once
 
-#define RGB_LED_RED_GPIO 21
-#define RGB_LED_GREEN_GPIO 19
-#define RGB_LED_BLUE_GPIO 18
+#define RGB_LED_RED_GPIO 13
+#define RGB_LED_GREEN_GPIO 12
+#define RGB_LED_BLUE_GPIO 14
 
 /**
  * LEDC_TIMER_8_BIT = 255
@@ -20,6 +20,10 @@ extern "C"
 #endif
 
     void set_rgb_led_interface(int red, int blue, int green);
+    void open_with_password_connect(char *password);
+    void set_led_ble(void);
+    void set_led_access_denid(void);
+    void set_led_access_allowed(void);
 
 #ifdef __cplusplus
 }
