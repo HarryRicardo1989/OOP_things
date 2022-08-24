@@ -39,6 +39,7 @@ namespace Perifericos
          */
         inline bool get_level(void)
         {
+
             return gpio_get_level(gpio_num) == 1;
         }
         /**

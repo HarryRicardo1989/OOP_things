@@ -1,6 +1,11 @@
 // default C/C++ lib
 #include "stdio.h"
+#include "esp_sleep.h"
 
+#include "driver/touch_pad.h"
+#include "soc/rtc_periph.h"
+#include "soc/sens_periph.h"
+#include "GPIO/gpio.hpp"
 // project libs
 #include "task.h"
 #include "rgb_led.hpp"
@@ -10,6 +15,9 @@
 #include <string.h>
 #include "nvs_flash.h"
 #include "Lang_conect/lang_conect.h"
+
+Perifericos::GPIO button = Perifericos::GPIO(GPIO_NUM_4, GPIO_MODE_INPUT, GPIO_PULLUP_ONLY);
+
 extern "C"
 {
     void app_main(void);
@@ -33,6 +41,12 @@ void app_main(void)
     set_led_ble();
     ble_init1();
 
+    touch_pad_init();
+    touch_pad_config(TOUCH_PAD_NUM0, 40);
+    touch_pad_set_trigger_source(TOUCH_TRIGGER_SOURCE_SET1);
+
+    esp_sleep_enable_touchpad_wakeup();
+
     while (true)
     {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -55,5 +69,16 @@ void vTask_battery_voltage(void *pvParameters)
     {
         battery_value(adc.GetVoltage());
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+        // uint16_t teste_touch;
+        // touch_pad_clear_status();
+        // touch_pad_read_raw_data(TOUCH_PAD_NUM0, &teste_touch);
+        // printf("%d", teste_touch);
+
+        // gpio_wakeup_enable(GPIO_NUM_4, GPIO_INTR_LOW_LEVEL);
+        //  esp_deep_sleep_start();
+        //  button.enableInterrupt();
+        button.set_level(1);
+        printf("%d\n", button.get_level());
+        // button.disableInterrupt();
     }
 }

@@ -1,11 +1,13 @@
 {
     "commentTranslate.targetLanguage": "en",
     "files.associations": {
+        "*.hpp": "cpp",
         "nvs_flash.h": "c",
         "stdio.h": "c",
         "esp_bt_main.h": "c",
         "esp_bt_defs.h": "c",
         "chrono": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "ratio": "cpp"
     }
 }
